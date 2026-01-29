@@ -1,0 +1,50 @@
+{
+  "questions": [
+    {
+      "question_id": 101,
+      "status": "A",
+      "contents": {
+        "uz": {
+          "question_text": "Qaysi avtomobil uchun bu belgilarning ta’sir oralig‘ida to‘xtashga ruxsat etiladi?",
+          "explanation_text": "YHQ 1-ilovasi 3-bo'limi 3-xatboshiga asosan, 176-bandga binoan, nogiron belgisi bo‘lgan avtomobillarga ruxsat etiladi.",
+          "image_url": "/files/img/test_questions/101/101-1-800.jpg",
+          "answer_video_url": "/files/testanswer/test_questions/101/101-697.mp4"
+        }
+      },
+      "answers": [
+        {
+          "option_id": 1,
+          "display_order": 1,
+          "is_correct": false,
+          "texts": {
+            "uz": "Qizil avtomobilga"
+          }
+        },
+        {
+          "option_id": 2,
+          "display_order": 2,
+          "is_correct": false,
+          "texts": {
+            "uz": "Ikkala avtomobilga"
+          }
+        },
+        {
+          "option_id": 3,
+          "display_order": 3,
+          "is_correct": false,
+          "texts": {
+            "uz": "Hech qaysi biriga"
+          }
+        },
+        {
+          "option_id": 4,
+          "display_order": 4,
+          "is_correct": true,
+          "texts": {
+            "uz": "Sariq avtomobilga"
+          }
+        }
+      ]
+    }
+  ]
+}

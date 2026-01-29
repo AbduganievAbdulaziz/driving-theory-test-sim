@@ -1,0 +1,38 @@
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+.idea/
+.vscode/
+*.code-workspace
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.venv/
+venv/
+ENV/
+
+# --- Env files (ignore all .env) ---
+.env
+**/.env
+
+# --- Data directory: ignore everything except templates.sample.json and README.md ---
+data/*
+!data/template.sample.json
+!data/README.md
+
+# --- Optional: logs ---
+*.log
+logs/

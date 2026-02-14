@@ -97,9 +97,14 @@ class TemplateDownloader:
 
 
 if __name__ == "__main__":
+    project_root = Path(__file__).resolve().parents[2]
+    target_dir = project_root / "data" / "templates"
+
     downloader = TemplateDownloader()
+    print(f"Saving files to: {target_dir}")
+    
     # Change lang_code here if you ever need another language
     # 1 = Uzbek Latin, 2 = Russian, 3 = Uzbek Cyrillic
-    downloader.download_all(lang_code=1, template_range=range(1, 61))
-    downloader.download_all(lang_code=2, template_range=range(1, 61))
-    downloader.download_all(lang_code=3, template_range=range(1, 61))
+    downloader.download_all(lang_code=1, template_range=range(1, 61), output_dir=target_dir)
+    downloader.download_all(lang_code=2, template_range=range(1, 61), output_dir=target_dir)
+    downloader.download_all(lang_code=3, template_range=range(1, 61), output_dir=target_dir)

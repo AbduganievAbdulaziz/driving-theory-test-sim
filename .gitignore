@@ -24,6 +24,9 @@ build/
 venv/
 ENV/
 
+# --- Seed data ---
+db/init/*seed.sql
+
 # --- Env files (ignore all .env) ---
 .env
 **/.env

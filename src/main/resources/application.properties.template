@@ -1,0 +1,7 @@
+spring.application.name=driving-theory
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/driving_exam
+spring.datasource.username=postgres
+spring.datasource.password=mysecretpassword
+
+spring.thymeleaf.cache=false

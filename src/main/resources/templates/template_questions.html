@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Template Questions</title>
+</head>
+<body>
+    <div th:each="question, iterStat : ${questions}"
+         th:text="|${iterStat.count}) ${question.text}|"></div>
+</body>
+</html>

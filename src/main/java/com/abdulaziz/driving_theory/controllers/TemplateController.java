@@ -1,16 +1,18 @@
 package com.abdulaziz.driving_theory.controllers;
 
+import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
 import com.abdulaziz.driving_theory.repositories.TemplateRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/")
+@RequestMapping("/templates")
 public class TemplateController {
     private final TemplateRepository repository;
 
@@ -24,5 +26,14 @@ public class TemplateController {
         model.addAttribute("templates", templates);
 
         return "template_list";
+    }
+
+    @GetMapping("/{template_id}/questions")
+    public String getTemplateQuestions(@PathVariable Integer template_id,
+                              Model model) {
+        List<QuestionContent> questions = repository.getQuestionsByTemplateId(template_id);
+        model.addAttribute("questions", questions);
+
+        return "template_questions";
     }
 }

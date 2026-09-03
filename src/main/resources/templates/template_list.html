@@ -25,7 +25,7 @@
     <div class="container">
         <a th:each="template : ${templates}"
             th:text="${template.code}"
-            th:href="@{/template_questions(template_id=${template.id})}"
+            th:href="@{/templates/{id}/questions(id=${template.id})}"
             class="cell">
         </a>
     </div>

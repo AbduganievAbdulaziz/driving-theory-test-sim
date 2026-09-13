@@ -30,7 +30,7 @@ public class TemplateController {
 
     @GetMapping("/{template_id}/questions")
     public String getTemplateQuestions(@PathVariable Integer template_id,
-                              Model model) {
+                                       Model model) {
         List<QuestionContent> questions = repository.getQuestionsByTemplateId(template_id);
         model.addAttribute("questions", questions);
 

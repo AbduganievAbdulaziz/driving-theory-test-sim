@@ -18,7 +18,7 @@ public class LanguageService {
         return repository.findAll();
     }
 
-    public List<LanguageChoice> getLangByCode(String langCode) {
+    public LanguageChoice getLangByCode(String langCode) {
         return repository.findByCode(langCode);
     }
 }

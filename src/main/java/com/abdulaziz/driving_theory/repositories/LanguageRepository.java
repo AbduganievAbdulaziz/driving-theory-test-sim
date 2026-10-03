@@ -1,6 +1,7 @@
 package com.abdulaziz.driving_theory.repositories;
 
 import com.abdulaziz.driving_theory.dtos.LanguageChoice;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -29,20 +30,23 @@ public class LanguageRepository {
         ));
     }
 
-    public List<LanguageChoice> findByCode(String langCode) {
+    public LanguageChoice findByCode(String langCode) {
         String sql = """
                 SELECT l.lang_id, l.name
                   FROM languages l
                  WHERE l.lang_code = ?
                  ORDER BY 1
                 """;
-
-        return jdbc.query(sql, (rs, rowNum) ->
-                        new LanguageChoice(
-                                rs.getInt("lang_id"),
-                                rs.getString("name")
-                        ),
-                langCode
-        );
+        try {
+            return jdbc.queryForObject(sql, (rs, rowNum) ->
+                            new LanguageChoice(
+                                    rs.getInt("lang_id"),
+                                    rs.getString("name")
+                            ),
+                    langCode
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return findByCode("uz");
+        }
     }
 }

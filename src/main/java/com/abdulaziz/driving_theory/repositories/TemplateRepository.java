@@ -2,6 +2,7 @@ package com.abdulaziz.driving_theory.repositories;
 
 import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
+import com.abdulaziz.driving_theory.repositories.util.LangResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +12,11 @@ import java.util.List;
 public class TemplateRepository {
     private final int lang_id = 1;
     private final JdbcTemplate jdbc;
+    private final LangResolver langResolver;
 
-    public TemplateRepository(JdbcTemplate jdbc) {
+    public TemplateRepository(JdbcTemplate jdbc, LangResolver langResolver) {
         this.jdbc = jdbc;
+        this.langResolver = langResolver;
     }
 
     public List<TemplateSummary> findAll() {
@@ -51,7 +54,7 @@ public class TemplateRepository {
                                 rs.getString("question_text")
                         ),
                 templateId,
-                lang_id
+                langResolver.getContextLangId()
         );
     }
 }

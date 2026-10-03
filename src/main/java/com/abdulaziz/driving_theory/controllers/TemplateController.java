@@ -3,8 +3,8 @@ package com.abdulaziz.driving_theory.controllers;
 import com.abdulaziz.driving_theory.dtos.LanguageChoice;
 import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
-import com.abdulaziz.driving_theory.repositories.TemplateRepository;
 import com.abdulaziz.driving_theory.services.LanguageService;
+import com.abdulaziz.driving_theory.services.TemplateService;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,17 +20,17 @@ import java.util.logging.Logger;
 @RequestMapping("/templates")
 public class TemplateController {
     private final LanguageService langService;
-    private final TemplateRepository repository;
+    private final TemplateService templateService;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public TemplateController(LanguageService langService, TemplateRepository repository) {
+    public TemplateController(LanguageService langService, TemplateService templateService) {
         this.langService = langService;
-        this.repository = repository;
+        this.templateService = templateService;
     }
 
     @GetMapping
     public String getAllTemplates(Model model) {
-        List<TemplateSummary> templates = repository.findAll();
+        List<TemplateSummary> templates = templateService.findAll();
         List<LanguageChoice> langChoices = langService.getLangChoices();
         model.addAttribute("templates", templates);
         model.addAttribute("languages", langChoices);
@@ -45,7 +45,7 @@ public class TemplateController {
         Locale current = LocaleContextHolder.getLocale();
         logger.info("Incoming locale: " + locale.getLanguage());
         logger.info("Current locale from context: " + current.getLanguage());
-        List<QuestionContent> questions = repository.getQuestionsByTemplateId(template_id);
+        List<QuestionContent> questions = templateService.getQuestionsByTemplateId(template_id);
         model.addAttribute("questions", questions);
 
         return "template_questions";

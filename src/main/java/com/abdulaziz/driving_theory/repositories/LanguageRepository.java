@@ -28,4 +28,21 @@ public class LanguageRepository {
                 )
         ));
     }
+
+    public List<LanguageChoice> findByCode(String langCode) {
+        String sql = """
+                SELECT l.lang_id, l.name
+                  FROM languages l
+                 WHERE l.lang_code = ?
+                 ORDER BY 1
+                """;
+
+        return jdbc.query(sql, (rs, rowNum) ->
+                        new LanguageChoice(
+                                rs.getInt("lang_id"),
+                                rs.getString("name")
+                        ),
+                langCode
+        );
+    }
 }

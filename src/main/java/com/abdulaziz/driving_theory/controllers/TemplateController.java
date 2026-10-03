@@ -43,8 +43,8 @@ public class TemplateController {
                                        Locale locale,
                                        Model model) {
         Locale current = LocaleContextHolder.getLocale();
-        logger.info("Incoming locale: " + locale.toLanguageTag());
-        logger.info("Current locale from context: " + current.toLanguageTag());
+        logger.info("Incoming locale: " + locale.getLanguage());
+        logger.info("Current locale from context: " + current.getLanguage());
         List<QuestionContent> questions = repository.getQuestionsByTemplateId(template_id);
         model.addAttribute("questions", questions);
 

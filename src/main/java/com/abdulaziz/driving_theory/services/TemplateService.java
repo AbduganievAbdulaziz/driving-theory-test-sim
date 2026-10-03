@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+// bla bla bla
+
 @Service
 public class TemplateService {
     private final TemplateRepository repository;

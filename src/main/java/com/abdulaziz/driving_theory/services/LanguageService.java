@@ -1,5 +1,6 @@
 package com.abdulaziz.driving_theory.services;
 
+import com.abdulaziz.driving_theory.domain.Language;
 import com.abdulaziz.driving_theory.dtos.LanguageChoice;
 import com.abdulaziz.driving_theory.repositories.LanguageRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,9 @@ public class LanguageService {
         return repository.findAll();
     }
 
-    public LanguageChoice getLangByCode(String langCode) {
-        return repository.findByCode(langCode);
+    public Language findLangByCode(String langCode) {
+        return repository.findByCode(langCode)
+                .or(() -> repository.findByCode("uz"))
+                .orElseThrow(() -> new IllegalArgumentException("Default language 'uz' not found"));
     }
 }

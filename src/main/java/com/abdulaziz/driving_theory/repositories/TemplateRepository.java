@@ -1,7 +1,7 @@
 package com.abdulaziz.driving_theory.repositories;
 
 import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.dtos.QuestionContent;
+import com.abdulaziz.driving_theory.dtos.QuestionContentOld;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -33,7 +33,7 @@ public class TemplateRepository {
         );
     }
 
-    public List<QuestionContent> getQuestionsByTemplateId(int templateId, Language lang) {
+    public List<QuestionContentOld> getQuestionsByTemplateId(int templateId, Language lang) {
         String sql = """
                 SELECT qc.question_id, qc.question_text
                   FROM template_questions tq
@@ -46,7 +46,7 @@ public class TemplateRepository {
 
         return jdbc.query(sql,
                 (rs, rowNum) ->
-                        new QuestionContent(
+                        new QuestionContentOld(
                                 rs.getInt("question_id"),
                                 rs.getString("question_text")
                         ),

@@ -1,3 +1,4 @@
 package com.abdulaziz.driving_theory.dtos;
 
-public record QuestionContent(int id, String text) {}
+public record QuestionContent (int id, String text, String imgUrl) {
+}

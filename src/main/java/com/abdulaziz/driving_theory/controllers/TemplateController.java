@@ -1,7 +1,7 @@
 package com.abdulaziz.driving_theory.controllers;
 
 import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.dtos.QuestionContent;
+import com.abdulaziz.driving_theory.dtos.QuestionContentOld;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
 import com.abdulaziz.driving_theory.services.LanguageService;
 import com.abdulaziz.driving_theory.services.TemplateService;
@@ -43,7 +43,7 @@ public class TemplateController {
     public String getTemplateQuestions(@PathVariable Integer template_id,
                                        Language language,
                                        Model model) {
-        List<QuestionContent> questions = templateService.getQuestionsByTemplateId(template_id, language);
+        List<QuestionContentOld> questions = templateService.getQuestionsByTemplateId(template_id, language);
         model.addAttribute("questions", questions);
 
         return "template_questions";

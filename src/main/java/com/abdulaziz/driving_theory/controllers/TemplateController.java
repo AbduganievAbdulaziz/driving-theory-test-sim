@@ -1,16 +1,13 @@
 package com.abdulaziz.driving_theory.controllers;
 
 import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.dtos.LanguageChoice;
 import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
 import com.abdulaziz.driving_theory.services.LanguageService;
 import com.abdulaziz.driving_theory.services.TemplateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,12 +22,19 @@ public class TemplateController {
         this.templateService = templateService;
     }
 
+    @ModelAttribute
+    public void initLangChoices(Language userLang, Model model) {
+        model.addAttribute("languages", langService.getLangChoices());
+        model.addAttribute("userLang", userLang);
+    }
+
     @GetMapping
-    public String getAllTemplates(Model model) {
+    public String getAllTemplates(@RequestParam(required = false) String lang, Model model) {
+        if (lang != null) {
+            return "redirect:/templates";
+        }
         List<TemplateSummary> templates = templateService.findAll();
-        List<LanguageChoice> langChoices = langService.getLangChoices();
         model.addAttribute("templates", templates);
-        model.addAttribute("languages", langChoices);
 
         return "template_list";
     }

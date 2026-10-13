@@ -1,7 +1,6 @@
 package com.abdulaziz.driving_theory.repositories;
 
 import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.dtos.LanguageChoice;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,16 +16,17 @@ public class LanguageRepository {
         this.jdbc = jdbc;
     }
 
-    public List<LanguageChoice> findAll() {
+    public List<Language> findAll() {
         String sql = """
-                SELECT l.lang_id, l.name
+                SELECT l.lang_id, l.lang_code, l.name
                   FROM languages l
                  ORDER BY 1
                 """;
 
         return jdbc.query(sql, ((rs, rowNum) ->
-                new LanguageChoice(
+                new Language(
                         rs.getInt("lang_id"),
+                        rs.getString("lang_code"),
                         rs.getString("name")
                 )
         ));

@@ -12,7 +12,6 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Locale;
 
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {

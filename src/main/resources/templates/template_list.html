@@ -49,9 +49,6 @@
             transform: translateY(-2px);
         }
     </style>
-    <script th:inline="javascript">
-        window.LANGUAGES = /*[[${languages}]]*/ [];
-    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand navbar-dark bg-dark">
@@ -61,26 +58,19 @@
                 <a class="nav-link active pb-0" aria-current="page" href="/templates">Шаблоны</a>
             </div>
 
-            <div class="navbar-nav ms-auto me-3"
-                 x-data="{
-                    langPref: window.LANGUAGES[0],
-                    languages: window.LANGUAGES,
-                    setLangPref(lang) { this.langPref = lang; }
-                 }">
+            <div class="navbar-nav ms-auto me-3">
                 <div class="dropdown">
-                    <a x-text="langPref.name || ''"
+                    <a th:text="${userLang.name()}"
                        class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     </a>
 
                     <ul class="dropdown-menu">
-                        <template x-for="lang in languages" :key="lang.id">
-                            <li>
-                                <button type="button"
-                                        class="dropdown-item"
-                                        x-text="lang.name"
-                                        @click="setLangPref(lang)"></button>
-                            </li>
-                        </template>
+                        <li th:each="lang : ${languages}">
+                            <a  class="dropdown-item"
+                                th:text="${lang.name()}"
+                                th:href="@{/templates(lang=${lang.code()})}">
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -38,14 +38,4 @@ public class TemplateController {
 
         return "template_list";
     }
-
-    @GetMapping("/{template_id}/questions")
-    public String getTemplateQuestions(@PathVariable Integer template_id,
-                                       Language language,
-                                       Model model) {
-        List<QuestionContentOld> questions = templateService.getQuestionsByTemplateId(template_id, language);
-        model.addAttribute("questions", questions);
-
-        return "template_questions";
-    }
 }

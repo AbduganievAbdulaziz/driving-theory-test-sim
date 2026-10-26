@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Exam Attempt</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <style>
+        :root {
+            --accent: #2563eb;
+            --accent-soft: #eff6ff;
+            --border: #e5e7eb;
+            --text: #334155;
+            --muted: #64748b;
+            --page-bg: #f8fafc;
+        }
+
+        body {
+            background-color: var(--page-bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---------- page area ---------- */
+        .attempt {
+            flex: 1;
+            width: 100%;
+            max-width: 1360px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        /* ---------- top bar: progress + close ---------- */
+        .attempt-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .progress-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .progress-label strong {
+            color: var(--text);
+        }
+
+        .close-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 1.4rem;
+            line-height: 1;
+            color: var(--text);
+            text-decoration: none;
+            transition: border-color .15s ease, color .15s ease;
+        }
+
+        .close-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ---------- question + image panels ---------- */
+        .panel {
+            height: 100%;
+            padding: 24px;
+            background-color: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .question-text {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 14px 16px;
+            background-color: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .option:hover {
+            border-color: var(--accent);
+            box-shadow: 0 6px 16px rgba(37, 99, 235, .12);
+        }
+
+        .option-label {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 28px;
+            border-radius: 6px;
+            background-color: var(--accent-soft);
+            color: var(--accent);
+            font-size: .875rem;
+            font-weight: 700;
+        }
+
+        .image-panel {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .image-panel img {
+            max-height: 420px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        /* ---------- bottom strip: question numbers ---------- */
+        .question-nav {
+            position: sticky;
+            bottom: 0;
+            padding: 12px 16px;
+            background-color: rgba(248, 250, 252, .95);
+            backdrop-filter: blur(6px);
+            border-top: 1px solid var(--border);
+        }
+
+        .question-nav-inner {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            max-width: 1360px;
+            margin: 0 auto;
+        }
+
+        .q-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background-color: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            transition: border-color .15s ease, color .15s ease, transform .15s ease;
+        }
+
+        .q-link:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .q-link.current {
+            background-color: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <div class="container-fluid">
+        <div class="navbar-nav ms-3">
+            <img class="navbar-brand d-flex align-items-center" th:src="@{/logo.png}" alt="" height="36">
+            <a class="nav-link pb-0" th:href="@{/templates}">Шаблоны</a>
+        </div>
+    </div>
+</nav>
+
+<main class="attempt">
+    <div class="attempt-bar">
+        <div class="progress-label">
+            <strong th:text="${qPosition}">1</strong> / <span th:text="${questionCount}">20</span>
+        </div>
+        <a class="close-btn" th:href="@{/templates}" aria-label="Close">&times;</a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg">
+            <section class="panel">
+                <p class="question-text" th:text="${question.text}">Question text</p>
+
+                <ol class="options">
+                    <li class="option" th:each="opt, stat : ${question.options}">
+                        <span class="option-label" th:text="|F${stat.count}|">F1</span>
+                        <span th:text="${opt.text}">Option text</span>
+                    </li>
+                </ol>
+            </section>
+        </div>
+
+        <div class="col-lg-5 order-first order-lg-last" th:if="${question.imgUrl != null}">
+            <section class="panel image-panel">
+                <img class="img-fluid" th:src="|https://back.eavtotalim.uz/${question.imgUrl}|" alt="">
+            </section>
+        </div>
+    </div>
+</main>
+
+<nav class="question-nav" aria-label="Questions">
+    <div class="question-nav-inner">
+        <a th:each="n : ${#numbers.sequence(1, questionCount)}"
+           th:href="${n}"
+           th:text="${n}"
+           th:classappend="${n == qPosition} ? 'current'"
+           th:attr="aria-current=${n == qPosition} ? 'page' : null"
+           class="q-link">1</a>
+    </div>
+</nav>
+</body>
+</html>

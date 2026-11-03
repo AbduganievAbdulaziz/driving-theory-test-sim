@@ -39,8 +39,6 @@ CREATE TABLE question_contents (
 
 COMMENT ON COLUMN question_contents.status IS '(A)ctive, (I)nactive, (D)raft';
 
-CREATE INDEX question_contents_i1 ON question_contents(lang_id);
-
 CREATE TABLE options (
   option_id     INTEGER   NOT NULL,
   question_id   INTEGER   NOT NULL,
@@ -64,8 +62,6 @@ CREATE TABLE option_contents (
   CONSTRAINT option_contents_f1 FOREIGN KEY (option_id) REFERENCES options(option_id) ON DELETE CASCADE,
   CONSTRAINT option_contents_f2 FOREIGN KEY (lang_id) REFERENCES languages(lang_id)
 );
-
-CREATE INDEX option_contents_i1 ON option_contents(lang_id);
 
 CREATE TABLE templates (
   template_id   INTEGER   NOT NULL,
@@ -95,3 +91,33 @@ CREATE TABLE template_questions (
 );
 
 CREATE INDEX template_questions_i1 ON template_questions(question_id);
+
+CREATE TABLE exam_attempts (
+  attempt_id      INTEGER   NOT NULl,
+  template_id     INTEGER   NOT NULL,
+  lang_id         SMALLINT  NOT NULL,
+  start_time      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),
+  finish_time     TIMESTAMP WITH TIME ZONE,
+  CONSTRAINT exam_attempts_pk PRIMARY KEY (attempt_id),
+  CONSTRAINT exam_attempts_f1 FOREIGN KEY (template_id) REFERENCES templates(template_id),
+  CONSTRAINT exam_attempts_f2 FOREIGN KEY (lang_id) REFERENCES languages(lang_id),
+  CONSTRAINT exam_attempts_c1 CHECK (start_time < finish_time)
+);
+
+CREATE INDEX exam_attempts_i1 ON exam_attempts(template_id);
+
+CREATE TABLE attempt_progress (
+  attempt_id       INTEGER   NOT NULl,
+  question_id      INTEGER   NOT NULL,
+  question_order   INTEGER   NOT NULL,
+  picked_option_id INTEGER,
+  answered_at      TIMESTAMP WITH TIME ZONE,
+  CONSTRAINT attempt_progress_u1 UNIQUE (attempt_id, question_id),
+  CONSTRAINT attempt_progress_u2 UNIQUE (attempt_id, question_order),
+  CONSTRAINT attempt_progress_f1 FOREIGN KEY (attempt_id) REFERENCES exam_attempts(attempt_id),
+  CONSTRAINT attempt_progress_f2 FOREIGN KEY (question_id) REFERENCES questions(question_id),
+  CONSTRAINT attempt_progress_f3 FOREIGN KEY (picked_option_id) REFERENCES options(option_id)
+);
+
+CREATE INDEX attempt_progress_i1 ON attempt_progress(question_id);
+CREATE INDEX attempt_progress_i2 ON attempt_progress(picked_option_id);

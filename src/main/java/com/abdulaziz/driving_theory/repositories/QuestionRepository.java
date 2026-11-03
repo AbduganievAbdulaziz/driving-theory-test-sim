@@ -1,7 +1,7 @@
 package com.abdulaziz.driving_theory.repositories;
 
 import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.domain.QuestionPosition;
+import com.abdulaziz.driving_theory.domain.QuestionOrder;
 import com.abdulaziz.driving_theory.dtos.OptionView;
 import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -36,7 +36,7 @@ public class QuestionRepository {
         );
     }
 
-    public Optional<QuestionContent> findContentByPosition(int templateId, QuestionPosition position, Language lang) {
+    public Optional<QuestionContent> findContentByOrder(int templateId, QuestionOrder order, Language lang) {
         String sql = """
                 SELECT qc.question_id, qc.question_text, qc.image_url
                   FROM template_questions tq
@@ -59,7 +59,7 @@ public class QuestionRepository {
                                     ),
                             templateId,
                             lang.id(),
-                            position.value() - 1
+                            order.value() - 1
                     )
             );
         } catch (EmptyResultDataAccessException e) {

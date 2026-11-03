@@ -1,7 +1,7 @@
 package com.abdulaziz.driving_theory.services;
 
 import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.domain.QuestionPosition;
+import com.abdulaziz.driving_theory.domain.QuestionOrder;
 import com.abdulaziz.driving_theory.dtos.OptionView;
 import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import com.abdulaziz.driving_theory.dtos.QuestionView;
@@ -22,10 +22,10 @@ public class ExamAttemptService {
         return repository.findQuestionCount(templateId, language);
     }
 
-    public QuestionView getQuestionByPosition(int templateId,
-                                              QuestionPosition position,
-                                              Language language) {
-        QuestionContent qContent = repository.findContentByPosition(templateId, position, language)
+    public QuestionView getQuestionByOrder(int templateId,
+                                           QuestionOrder order,
+                                           Language language) {
+        QuestionContent qContent = repository.findContentByOrder(templateId, order, language)
                 .orElseThrow(() -> new IllegalArgumentException("Question was not found"));
         List<OptionView> qOptions = repository.findOptionsByQuestionId(qContent.id(), language);
 

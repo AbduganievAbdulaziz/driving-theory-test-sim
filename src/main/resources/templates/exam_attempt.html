@@ -199,7 +199,7 @@
 <main class="attempt">
     <div class="attempt-bar">
         <div class="progress-label">
-            <strong th:text="${qPosition}">1</strong> / <span th:text="${questionCount}">20</span>
+            <strong th:text="${qOrder}">1</strong> / <span th:text="${questionCount}">20</span>
         </div>
         <a class="close-btn" th:href="@{/templates}" aria-label="Close">&times;</a>
     </div>
@@ -231,8 +231,8 @@
         <a th:each="n : ${#numbers.sequence(1, questionCount)}"
            th:href="${n}"
            th:text="${n}"
-           th:classappend="${n == qPosition} ? 'current'"
-           th:attr="aria-current=${n == qPosition} ? 'page' : null"
+           th:classappend="${n == qOrder} ? 'current'"
+           th:attr="aria-current=${n == qOrder} ? 'page' : null"
            class="q-link">1</a>
     </div>
 </nav>

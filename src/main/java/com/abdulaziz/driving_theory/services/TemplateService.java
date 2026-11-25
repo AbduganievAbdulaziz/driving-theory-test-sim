@@ -1,7 +1,5 @@
 package com.abdulaziz.driving_theory.services;
 
-import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.dtos.QuestionContentOld;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
 import com.abdulaziz.driving_theory.repositories.TemplateRepository;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,5 @@ public class TemplateService {
 
     public List<TemplateSummary> findAll() {
         return repository.findAll();
-    }
-
-    public List<QuestionContentOld> getQuestionsByTemplateId(int templateId, Language language) {
-        return repository.getQuestionsByTemplateId(templateId, language);
     }
 }

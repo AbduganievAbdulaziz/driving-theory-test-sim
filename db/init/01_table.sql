@@ -93,7 +93,7 @@ CREATE TABLE template_questions (
 CREATE INDEX template_questions_i1 ON template_questions(question_id);
 
 CREATE TABLE exam_attempts (
-  attempt_id      INTEGER   NOT NULl,
+  attempt_id      INTEGER   NOT NULl DEFAULT nextval('exam_attempts_sq'),
   template_id     INTEGER   NOT NULL,
   lang_id         SMALLINT  NOT NULL,
   start_time      TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(),

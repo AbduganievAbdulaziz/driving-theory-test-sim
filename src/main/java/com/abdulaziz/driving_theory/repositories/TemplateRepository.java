@@ -1,7 +1,5 @@
 package com.abdulaziz.driving_theory.repositories;
 
-import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.dtos.QuestionContentOld;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,28 +28,6 @@ public class TemplateRepository {
                                 rs.getInt("template_id"),
                                 rs.getString("code")
                         )
-        );
-    }
-
-    public List<QuestionContentOld> getQuestionsByTemplateId(int templateId, Language lang) {
-        String sql = """
-                SELECT qc.question_id, qc.question_text
-                  FROM template_questions tq
-                  JOIN question_contents qc
-                    ON qc.question_id = tq.question_id
-                 WHERE tq.template_id = ?
-                   AND qc.lang_id = ?
-                 ORDER BY tq.display_order
-                """;
-
-        return jdbc.query(sql,
-                (rs, rowNum) ->
-                        new QuestionContentOld(
-                                rs.getInt("question_id"),
-                                rs.getString("question_text")
-                        ),
-                templateId,
-                lang.id()
         );
     }
 }

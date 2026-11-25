@@ -1,7 +1,5 @@
 package com.abdulaziz.driving_theory.repositories;
 
-import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.domain.QuestionOrder;
 import com.abdulaziz.driving_theory.dtos.OptionView;
 import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,34 +17,12 @@ public class QuestionRepository {
         this.jdbc = jdbc;
     }
 
-    public int findQuestionCount(int templateId, Language lang) {
+    public Optional<QuestionContent> findQuestionContentById(int questionId, int langId) {
         String sql = """
-                SELECT count(*) question_count
-                  FROM template_questions tq
-                  JOIN question_contents qc
-                    ON qc.question_id = tq.question_id
-                 WHERE tq.template_id = ?
-                   and qc.lang_id = ?
-                """;
-
-        return jdbc.queryForObject(sql,
-                (rs, rowNum) -> rs.getInt("question_count"),
-                templateId,
-                lang.id()
-        );
-    }
-
-    public Optional<QuestionContent> findContentByOrder(int templateId, QuestionOrder order, Language lang) {
-        String sql = """
-                SELECT qc.question_id, qc.question_text, qc.image_url
-                  FROM template_questions tq
-                  JOIN question_contents qc
-                    ON qc.question_id = tq.question_id
-                 WHERE tq.template_id = ?
-                   and qc.lang_id = ?
-                 ORDER BY tq.display_order
-                 OFFSET ?
-                 FETCH FIRST ROW ONLY
+                SELECT t.question_id, t.question_text, t.image_url
+                  FROM question_contents t
+                 WHERE t.question_id = ?
+                   and t.lang_id = ?
                 """;
 
         try {
@@ -57,9 +33,8 @@ public class QuestionRepository {
                                             rs.getString("question_text"),
                                             rs.getString("image_url")
                                     ),
-                            templateId,
-                            lang.id(),
-                            order.value() - 1
+                    questionId,
+                           langId
                     )
             );
         } catch (EmptyResultDataAccessException e) {
@@ -67,7 +42,7 @@ public class QuestionRepository {
         }
     }
 
-    public List<OptionView> findOptionsByQuestionId(int questionId, Language lang) {
+    public List<OptionView> findOptionsByQuestionId(int questionId, int langId) {
         String sql = """
                 SELECT oc.option_id, oc.option_text
                   FROM options o
@@ -85,7 +60,7 @@ public class QuestionRepository {
                                 rs.getString("option_text")
                         ),
                 questionId,
-                lang.id()
+                langId
         );
     }
 }

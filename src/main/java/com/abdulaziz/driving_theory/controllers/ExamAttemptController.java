@@ -7,10 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@RequestMapping("/templates")
 public class ExamAttemptController {
     private final ExamAttemptService attemptService;
 
@@ -18,21 +17,26 @@ public class ExamAttemptController {
         this.attemptService = attemptService;
     }
 
-    @GetMapping(value = {"/{template_id}/questions",
-                         "/{template_id}/questions/{question_order}"})
-    public String initExamAttempt(@PathVariable Integer template_id,
-                                  @PathVariable(required = false) Integer question_order,
-                                  Language language,
-                                  Model model) {
+    @GetMapping(value = {"/attempts/{attempt_id}/questions",
+                         "/attempts/{attempt_id}/questions/{question_order}"})
+    public String getAttemptContent(@PathVariable Integer attempt_id,
+                                    @PathVariable(required = false) Integer question_order,
+                                    Model model) {
         if (question_order == null) {
-            return "redirect:/templates/" + template_id + "/questions/1";
+            return "redirect:/attempts/" + attempt_id + "/questions/1";
         }
         QuestionOrder qOrder = new QuestionOrder(question_order);
 
-        model.addAttribute("question", attemptService.getQuestionByOrder(template_id, qOrder, language));
+        model.addAttribute("question", attemptService.getQuestionByOrder(attempt_id, qOrder));
+        model.addAttribute("questionCount", attemptService.getQuestionCount(attempt_id));
         model.addAttribute("qOrder", qOrder.value());
-        model.addAttribute("questionCount", attemptService.getQuestionCount(template_id, language));
 
         return "exam_attempt";
+    }
+
+    @PostMapping("/attempt-template/{template_id}")
+    public String createTemplateAttempt(@PathVariable Integer template_id,
+                                       Language language) {
+        return "redirect:/attempts/" + attemptService.createExamAttempt(template_id, language) + "/questions/1";
     }
 }

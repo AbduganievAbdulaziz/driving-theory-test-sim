@@ -1,7 +1,6 @@
 package com.abdulaziz.driving_theory.controllers;
 
 import com.abdulaziz.driving_theory.domain.Language;
-import com.abdulaziz.driving_theory.dtos.QuestionContentOld;
 import com.abdulaziz.driving_theory.dtos.TemplateSummary;
 import com.abdulaziz.driving_theory.services.LanguageService;
 import com.abdulaziz.driving_theory.services.TemplateService;

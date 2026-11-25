@@ -1,5 +1,6 @@
 package com.abdulaziz.driving_theory.repositories;
 
+import com.abdulaziz.driving_theory.domain.Language;
 import com.abdulaziz.driving_theory.dtos.OptionView;
 import com.abdulaziz.driving_theory.dtos.QuestionContent;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,7 +18,7 @@ public class QuestionRepository {
         this.jdbc = jdbc;
     }
 
-    public Optional<QuestionContent> findQuestionContentById(int questionId, int langId) {
+    public Optional<QuestionContent> findQuestionContentById(int questionId, Language language) {
         String sql = """
                 SELECT t.question_id, t.question_text, t.image_url
                   FROM question_contents t
@@ -34,7 +35,7 @@ public class QuestionRepository {
                                             rs.getString("image_url")
                                     ),
                     questionId,
-                           langId
+                          language.id()
                     )
             );
         } catch (EmptyResultDataAccessException e) {
@@ -42,7 +43,7 @@ public class QuestionRepository {
         }
     }
 
-    public List<OptionView> findOptionsByQuestionId(int questionId, int langId) {
+    public List<OptionView> findOptionsByQuestionId(int questionId, Language language) {
         String sql = """
                 SELECT oc.option_id, oc.option_text
                   FROM options o
@@ -60,7 +61,7 @@ public class QuestionRepository {
                                 rs.getString("option_text")
                         ),
                 questionId,
-                langId
+                language.id()
         );
     }
 }

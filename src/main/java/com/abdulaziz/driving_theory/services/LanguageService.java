@@ -28,4 +28,9 @@ public class LanguageService {
         return repository.findByCode(langCode)
                 .orElseGet(this::getDefaultLang);
     }
+
+    public Language findLangById(int langId) {
+        return repository.findById(langId)
+                .orElseThrow(() -> new IllegalArgumentException("Language with ID: " + langId + " was not found"));
+    }
 }

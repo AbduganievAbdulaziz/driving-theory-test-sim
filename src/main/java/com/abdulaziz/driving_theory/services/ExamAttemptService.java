@@ -13,10 +13,14 @@ import java.util.List;
 
 @Service
 public class ExamAttemptService {
+    private final LanguageService languageService;
     private final QuestionRepository questionRepository;
     private final AttemptRepository attemptRepository;
 
-    public ExamAttemptService(QuestionRepository questionRepository, AttemptRepository attemptRepository) {
+    public ExamAttemptService(LanguageService languageService,
+                           QuestionRepository questionRepository,
+                           AttemptRepository  attemptRepository) {
+        this.languageService = languageService;
         this.questionRepository = questionRepository;
         this.attemptRepository = attemptRepository;
     }
@@ -25,19 +29,14 @@ public class ExamAttemptService {
         return attemptRepository.findQuestionCount(attemptId);
     }
 
-    private QuestionContent getQuestionContentByOrder(int attemptId, int langId, QuestionOrder order) {
-        int questionId = attemptRepository.findQuestionIdByOrder(attemptId, order);
-
-        return questionRepository.findQuestionContentById(questionId, langId)
-                .orElseThrow(() -> new IllegalArgumentException("Question was not found"));
-    }
-
     public QuestionView getQuestionByOrder(int attemptId,
                                            QuestionOrder order) {
-        int langId = attemptRepository.findAttemptLangId(attemptId);
-        QuestionContent qContent = getQuestionContentByOrder(attemptId, langId, order);
-        List<OptionView> qOptions = questionRepository.findOptionsByQuestionId(qContent.id(), langId);
+        int questionId = attemptRepository.findQuestionIdByOrder(attemptId, order);
+        Language attemptLang = findAttemptLanguage(attemptId);
 
+        QuestionContent qContent = questionRepository.findQuestionContentById(questionId, attemptLang)
+                .orElseThrow(() -> new IllegalArgumentException("Question was not found"));
+        List<OptionView> qOptions = questionRepository.findOptionsByQuestionId(qContent.id(), attemptLang);
 
         return new QuestionView(
                 qContent.id(),
@@ -51,5 +50,10 @@ public class ExamAttemptService {
         attemptRepository.prepareProgress(newAttemptId, templateId);
 
         return newAttemptId;
+    }
+
+    private Language findAttemptLanguage(int attemptId) {
+        int langId = attemptRepository.findAttemptLangId(attemptId);
+        return languageService.findLangById(langId);
     }
 }

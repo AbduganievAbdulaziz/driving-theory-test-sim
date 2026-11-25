@@ -5,16 +5,22 @@ import com.abdulaziz.driving_theory.domain.QuestionOrder;
 import com.abdulaziz.driving_theory.services.ExamAttemptService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class ExamAttemptController {
     private final ExamAttemptService attemptService;
 
+    public record validateAnswerDTO(Integer attemptId, Integer questionOrder, Integer optionId) {}
+
     public ExamAttemptController(ExamAttemptService attemptService) {
         this.attemptService = attemptService;
+    }
+
+    @PostMapping("/attempt-template/{template_id}")
+    public String createTemplateAttempt(@PathVariable Integer template_id,
+                                        Language language) {
+        return "redirect:/attempts/" + attemptService.createExamAttempt(template_id, language) + "/questions/1";
     }
 
     @GetMapping(value = {"/attempts/{attempt_id}/questions",
@@ -34,9 +40,10 @@ public class ExamAttemptController {
         return "exam_attempt";
     }
 
-    @PostMapping("/attempt-template/{template_id}")
-    public String createTemplateAttempt(@PathVariable Integer template_id,
-                                       Language language) {
-        return "redirect:/attempts/" + attemptService.createExamAttempt(template_id, language) + "/questions/1";
+    @GetMapping("/validate-answer")
+    @ResponseBody
+    public String validateAnswer(@RequestBody validateAnswerDTO requestData) {
+        QuestionOrder qOrder = new QuestionOrder(requestData.questionOrder());
+        return attemptService.isOptionCorrect(requestData.optionId(), requestData.attemptId(), qOrder) ? "Y" : "N";
     }
 }

@@ -80,4 +80,42 @@ public class AttemptRepository {
                 order.value() - 1
         );
     }
+
+    public Integer findPickedOptionId(int attemptId, QuestionOrder order) {
+        String sql = """
+                SELECT t.picked_option_id
+                  FROM attempt_progress t
+                 WHERE t.attempt_id = ?
+                 ORDER BY t.question_order
+                 OFFSET ?
+                 FETCH FIRST ROW ONLY
+                """;
+
+        return jdbc.queryForObject(
+                sql,
+                Integer.class,
+                attemptId,
+                order.value() - 1
+        );
+    }
+
+    public Integer findOptionQuestionId(int optionId) {
+        String sql = """
+                SELECT t.question_id
+                  FROM options t
+                 WHERE t.option_id = ?
+                """;
+
+        return jdbc.queryForObject(sql, Integer.class, optionId);
+    }
+
+    public Boolean isOptionCorrect(int optionId) {
+        String sql = """
+                SELECT t.is_correct
+                  FROM options t
+                 WHERE t.option_id = ?
+                """;
+
+        return jdbc.queryForObject(sql, Boolean.class, optionId);
+    }
 }

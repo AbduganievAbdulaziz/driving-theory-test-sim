@@ -52,8 +52,27 @@ public class ExamAttemptService {
         return newAttemptId;
     }
 
+    public boolean isOptionCorrect(int optionId, int attemptId, QuestionOrder order) {
+        if (isQuestionAnswered(attemptId, order)) {
+            throw new IllegalStateException("The question was already answered");
+        }
+        int answeredQuestionId = attemptRepository.findQuestionIdByOrder(attemptId, order);
+        int optionQuestionId = attemptRepository.findOptionQuestionId(optionId);
+
+        if (answeredQuestionId != optionQuestionId) {
+            throw new IllegalArgumentException("The picked option belongs to a different question");
+        }
+
+        Boolean isCorrect = attemptRepository.isOptionCorrect(optionId);
+        return isCorrect != null && isCorrect;
+    }
+
     private Language findAttemptLanguage(int attemptId) {
         int langId = attemptRepository.findAttemptLangId(attemptId);
         return languageService.findLangById(langId);
+    }
+
+    private boolean isQuestionAnswered(int attemptId, QuestionOrder order) {
+        return attemptRepository.findPickedOptionId(attemptId, order) != null;
     }
 }
